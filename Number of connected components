@@ -1,0 +1,433 @@
+/*********Do not cheat*******************
+**        Solution by KUNAl0612         **
+**********Do not cheat*******************/
+#include <bits/stdc++.h>
+#define ll long long int
+#define lll unsigned long long
+#define inputa(a,n) for(int i=0;i<n;i++){int x;cin>>x;a.push_back(x);}
+#define printv(v) for(int i=0;i<(v.size());i++){cout<<v[i]<<" ";} cout<<endl;
+#define fr(i, a, b) for (int i = a; i < b; i++)
+#define fl(i, a, b) for (int i = a; i > b ; i--)
+#define srtf(x_) sort(x_.begin(),x_.end())
+#define srtb(x_) sort(x_.begin(),x_.end(),greater<int>())
+#define Yes cout<<"YES"<<endl;
+#define No cout<<"NO"<<endl;
+#define PII pair<int,int>
+#define mod 1000000007
+#define nl "\n"
+//__builtin_popcount(n)
+using namespace std;
+ll str_to_num(string s){
+    return stoi(s);
+}
+int isSubstring(string s1, string s2)
+{
+    // using find method to check if s1 is
+    // a substring of s2
+    if (s2.find(s1) != string::npos)
+        return s2.find(s1);
+    return -1;
+}
+
+int gcd(ll a, ll b)
+{
+    return b == 0 ? a : gcd(b, a % b);
+}
+
+int lcm(ll a, ll b){
+    return a*b/gcd(a,b);
+}
+
+bool isPrime(int n)
+{
+    // Corner case
+    if (n <= 1)
+        return false;
+
+    // Check from 2 to square root of n
+    for (int i = 2; i <= sqrt(n); i++)
+        if (n % i == 0)
+            return false;
+
+    return true;
+}
+
+int rev(int x)
+{
+	int y=0;
+	for(int i=0;i<8;i++)
+		if((x>>i)&1)y^=(1<<(7-i));
+	return y;
+}
+
+void decToBinary(int n)
+{
+    // array to store binary number
+    int binaryNum[32];
+
+    // counter for binary array
+    int i = 0;
+    while (n > 0) {
+
+        // storing remainder in binary array
+        binaryNum[i] = n % 2;
+        n = n / 2;
+        i++;
+    }
+
+    // printing binary array in reverse order
+    for (int j = i - 1; j >= 0; j--)
+        cout << binaryNum[j];
+}
+void leftrotate(string &s, int d)
+{
+    reverse(s.begin(), s.begin()+d);
+    reverse(s.begin()+d, s.end());
+    reverse(s.begin(), s.end());
+}
+
+// In-place rotates s towards right by d
+void rightrotate(string &s, int d)
+{
+   leftrotate(s, s.length()-d);
+}
+string num_to_str(ll num){
+    return to_string(num);
+}
+
+ll power(ll a,ll b){
+    if(b==0) return 1LL;
+    if(b==1) return a;
+    ll res = 1LL;
+    while(b){
+        if(b%2) res*=a;
+        b/=2;
+        a = a*a;
+    }
+    return res;
+}
+
+static bool com(pair<int,string> p1, pair<int,string> p2){
+    if(p1.first>p2.first || (p1.first==p2.first && p1.second<p2.second))
+            return true;
+        return false;
+}
+bool sortbysec(const pair<int,int> &a,
+              const pair<int,int> &b)
+{
+    return (a.second < b.second);
+}
+/*
+void swap(TreeNode* A, TreeNode* B){
+    int tmp = A->val;
+    A->val = B->val;
+    B->val = tmp;
+}
+void reverse_node(vector<TreeNode*> &arr){
+    int i = 0, j = arr.size()-1;
+    while(i<=j){
+        swap(arr[i++], arr[j--]);
+    }
+}
+
+//Pre-Order Traversal
+void preorder(TreeNode* root){
+   if(root==NULL){
+      return;
+   }
+   print(root->val);
+   preorder(node->left);
+   preorder(node->right);
+}
+//Inorder Traversal
+void inorder(TreeNode* root){
+   if(root==NULL){
+      return;
+   }
+   preorder(node->left);
+   print(root->val);
+   preorder(node->right);
+}
+//Post-order Traversal
+void postorder(TreeNode* root){
+   if(root==NULL){
+      return;
+   }
+   preorder(node->left);
+   preorder(node->right);
+   print(root->val);
+}
+Level-Order Traversal
+*********************************
+        queue<TreeNode*> q;
+        q.push(root);
+        vector<vector<int>> ans;
+        if(root==NULL){
+            return ans;
+        }
+        while(!q.empty()){
+            vector<int> vec;
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                TreeNode* node=q.front();
+                q.pop();
+                if(node->left!=NULL){
+                    q.push(node->left);
+                }
+                if(node->right!=NULL){
+                    q.push(node->right);
+                }
+                vec.push_back(node->val);
+            }
+            ans.push_back(vec);
+        }
+        return ans;
+********************************
+*/
+bool ispow(int y, int x){
+
+    int res1 = log(y) / log(x);
+    double res2 = log(y) / log(x);
+    return (res1 == res2);
+}
+ll binaryToDecimal(string n)
+{
+    string num = n;
+    ll dec_value = 0;
+
+    // Initializing base value to 1, i.e 2^0
+    ll base = 1;
+
+    ll len = num.length();
+    for (ll i = len - 1; i >= 0; i--) {
+        if (num[i] == '1')
+            dec_value += base;
+        base = base * 2;
+    }
+
+    return dec_value;
+}
+
+int cntsubstr(string& str, string& sub)
+{
+    if (sub.length() == 0) return 0;
+    int count = 0;
+    for (size_t offset = str.find(sub); offset != std::string::npos;
+     offset = str.find(sub, offset + sub.length()))
+    {
+        ++count;
+    }
+    return count;
+}
+int countDivisors(int n)
+{
+    int cnt = 0;
+    for (int i = 1; i <= sqrt(n); i++) {
+        if (n % i == 0) {
+            // If divisors are equal,
+            // count only one
+            if (n / i == i)
+                cnt++;
+
+            else // Otherwise count both
+                cnt = cnt + 2;
+        }
+    }
+    return cnt;
+}
+ll modexp(ll a, ll b)
+{
+    ll ans=1;
+
+    while(b>0){
+        if((b%2)==1){
+            ans=(ans*a)%mod;
+        }
+        a=(a*a)%mod;
+        b/=2;
+    }
+
+    return ans;
+}
+
+void printpq(priority_queue<int> x){
+    priority_queue<int> p = x;
+    while (!p.empty()) {
+        cout << '\t' << p.top();
+        p.pop();
+    }
+	cout << '\n';
+}
+
+bool isInteger(double N){
+
+    int X = N;
+
+    double temp2 = N - X;
+
+    if (temp2 > 0) {
+        return false;
+    }
+    return true;
+}
+bool issubsequence(string& s1, string& s2)
+{
+    int n = s1.length(), m = s2.length();
+    int i = 0, j = 0;
+    while (i < n && j < m) {
+        if (s1[i] == s2[j])
+            i++;
+        j++;
+    }
+    /*If i reaches end of s1,that mean we found all
+    characters of s1 in s2,
+    so s1 is subsequence of s2, else not*/
+    return i == n;
+}
+class Compare {
+public:
+    bool operator()(PII below, PII above)
+    {
+        if (below.first < above.first) { //map heap
+            return true;
+        }
+        else if (below.first == above.first
+                 && below.second > above.second) { //increasing sort by second
+            return true;
+        }
+
+        return false;
+    }
+};
+
+int countDistinct(int arr[], int n){
+    sort(arr, arr + n);
+    int res = 0;
+    for (int i = 0; i < n; i++) {
+        while (i < n - 1 && arr[i] == arr[i + 1])
+            i++;
+        res++;
+    }
+    return res;
+}
+int Mex(vector<int>&arr) {
+    int n=arr.size();
+    vector<int> b;
+    for(int i=0;i<n;i++){
+    	b.push_back(arr[i]);
+	}
+	sort(b.begin(),b.end());
+    for (int i=0;i<n;i++) {
+      if(b[i]!=i){
+        return i;
+      }
+    }
+    return n;
+  }
+  ll smallestDivisor(ll n)
+{
+    // if divisible by 2
+    if (n % 2 == 0)
+        return 2;
+
+    // iterate from 3 to sqrt(n)
+    for (ll i = 3; i * i <= n; i += 2) {
+        if (n % i == 0)
+            return i;
+    }
+
+    return n;
+}
+/*
+auto iter = lower_bound(vec.begin(), vec.end(), temp);
+        if (*(iter + 1) == temp || *iter == temp)
+            cout << "Yes " << iter - vec.begin() + 1 << endl;
+        else
+            cout << "No " << iter - vec.begin() + 1 << endl;
+
+//...Prefix product and suffix product
+        for(int i=1;i<n;i++){
+			lp[i]=lp[i-1]*nums[i-1];
+		}
+		for(int i=n-2;i>=0;i--){
+			rp[i]=rp[i+1]*nums[i+1];
+		}
+
+//Prifix Xor
+vector<int> pre(n+1,0);
+        for(int i=0;i<n;i++){
+            pre[i+1]=pre[i]^nums[i];
+        }
+        vector<int> ans;
+        for(auto &x:quer){
+            int res=pre[x[1]+1]^pre[x[0]];
+            ans.push_back(res);
+        }
+        ex-[1,3,4,8]
+        pre=[0,1,2,6,14]
+
+*/
+
+bool dict3(int N){
+    while (N > 0) {
+        if (N % 3 == 2) {
+            return false;
+        }
+        N /= 3;
+    }
+    return true;
+}
+ll c[200005][102];
+ll a[200005];
+ll C(int n,int m)
+{
+	if(c[n][m]) return c[n][m];
+	if(m==0||n==m) return 1;
+	return c[n][m]=(C(n-1,m)+C(n-1,m-1));
+}
+
+
+vector<ll> vis;
+unordered_map<ll,vector<ll>> mp;
+void dfs(ll i){
+	vis[i]=1;
+	for(auto x:mp[i]){
+		if(vis[x]) continue;
+		vis[x]=1;
+		dfs(x);
+	}
+}
+void kunal(){
+	ll n,m;
+	cin>>n>>m;
+	ll cnt=0;
+	vis.resize(n+1,0);
+	for(ll i=0;i<m;i++){
+		ll x,y;
+		cin>>x>>y;
+		mp[x].push_back(y);
+		mp[y].push_back(x);
+	}
+	for(ll i=1;i<=n;i++){
+		if(!vis[i]){
+			dfs(i);
+			cnt++;
+		}
+	}
+	cout<<cnt<<nl;
+}
+
+
+//cout << fixed << setprecision(10) <<sum;
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    //freopen("input.txt", "r", stdin);
+    //freopen("output.txt", "w", stdout);
+    int t;
+    t=1;
+    while(t--){
+        kunal();
+    }
+    return 0;
+}
