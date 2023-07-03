@@ -1,0 +1,24 @@
+void kunal(){
+	string s;
+	cin>>s;
+	ll z=0,o=0,ans=0;
+	for(auto &x:s){
+		if(x=='0'){
+			z++;
+			o=0;
+			ans+=z;
+		}
+		else if(x=='1'){
+			o++;
+			z=0;
+			ans+=o;
+		}
+		else{
+			o++;
+			z++;
+			ans+=max(o,z);
+		}
+		swap(o,z);
+	}
+	cout<<ans<<nl;
+}
