@@ -48,7 +48,7 @@ public:
     Trie(){
         root = new Node();
     }
-    void insert(string s){  //to insert a word in a trie
+    void insert(string &s){  //to insert a word in a trie
         Node* tmp = root;
         for(int i = 0; i < s.size(); ++i){
             if(!tmp->contains(s[i])){
@@ -58,7 +58,7 @@ public:
         }
         tmp->setEnd();
     }
-    bool isallpre_present(string s){ //return true if all prefix is present else false
+    bool isallpre_present(string &s){ //return true if all prefix is present else false
         Node* tmp = root;
         for(auto c : s){
             tmp = tmp->next(c);
@@ -66,7 +66,7 @@ public:
         }
         return true;
     }
-    bool search(string word) { //return true if word is present else false
+    bool search(string &word) { //return true if word is present else false
         Node *node = root;
         for(int i =0;i<word.size();i++){
             if(!node->contains(word[i])) return false; 
@@ -105,7 +105,7 @@ public:
         }
         node->decend();
     }
-    bool startsWith(string word) {   //check if string start with word present or not
+    bool startsWith(string &word) {   //check if string start with word present or not
         Node *node = root;
         for(auto x:word){
             if(!node->contains(x)) return false;
