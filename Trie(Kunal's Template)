@@ -1,0 +1,33 @@
+    class Triee{
+    public:
+        Triee *child[26];
+        bool isEnd = false;
+    };
+    Triee *root;
+    Trie() {
+        root = new Triee();
+    }
+    void insert(string word) {
+        Triee* cur = root;
+        for(auto &ch : word){
+            if(!cur->child[ch-'a']) cur->child[ch-'a'] = new Triee();
+            cur=cur->child[ch-'a'];
+        }
+        cur->isEnd = true;
+    }
+    bool search(string word) {
+        Triee* cur = root;
+        for(auto &ch : word){
+            if(!cur->child[ch-'a']) return false;
+            cur=cur->child[ch-'a'];
+        }
+        return cur->isEnd;
+    }
+    bool startsWith(string prefix) {
+        Triee* cur = root;
+        for(auto &ch : prefix){
+            if(!cur->child[ch-'a']) return false;
+            cur=cur->child[ch-'a'];
+        }
+        return true;
+    }
