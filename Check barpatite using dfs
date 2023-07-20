@@ -1,0 +1,17 @@
+bool dfs(unordered_map<ll,vector<ll>> &mp,vector<ll> &vis,vector<ll> &col,ll sc){
+	vis[sc]=1;
+	for(auto x:mp[sc]){
+		if(col[sc]==col[x]) return false;
+		else if(!vis[x]){
+			vis[x]=1;
+			if(col[sc]==0){
+				col[x]=1;
+			}
+			else if(col[sc]==1){
+				col[x]=0;
+			}
+			if(!dfs(mp,vis,col,x)) return false;
+		}
+	}
+	return true;
+}
