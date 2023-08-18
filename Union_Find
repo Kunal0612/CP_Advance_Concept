@@ -25,3 +25,73 @@ class DSU{
             }
         }
 };
+
+
+
+
+
+
+Use in CP
+
+
+int find(ll v,vector<ll> &parent){
+    if(v==parent[v]){
+        return v;
+    }
+    return parent[v]=find(parent[v],parent);
+}
+void Union(ll a,ll b,vector<ll> &size,vector<ll> &parent){
+    a=find(a,parent);
+    b=find(b,parent);
+    if(a!=b){
+        if(size[a]<size[b]) swap(a,b);
+        parent[b]=a;
+        size[a]+=size[b]+0LL;
+    }
+}
+
+void kunal(){
+   ll n,m;
+   cin>>n>>m;
+   map<ll,vector<ll>> mp;
+   vector<ll> parent(m+1,-1),size(m+1,-1);
+   for(ll i=0;i<=m;i++){
+        parent[i]=i;
+        size[i]=1;
+    }
+    ll ans=0,ans2=0;
+   ll i=1;
+   while(n--){
+    ll sz;
+    cin>>sz;
+    if(sz==0) ans++;
+    ll prev=-1;
+    while(sz--){
+        ll x;
+        cin>>x;
+        if(prev!=-1){
+            Union(x,prev,size,parent);
+        }
+        prev=x;
+        mp[i].push_back(x);
+    }
+    i++;
+   }
+   map<ll,ll> mpp;
+   for(auto x:mp){
+    //cout<<x.second[0]<<" ";
+        ll r=find(x.second[0],parent);
+        //cout<<r<<" ";
+        mpp[r]++;
+   }
+
+   cout<<nl;
+   for(auto x:mpp){
+    if(x.second>0){
+        ans2++;
+    }
+   }
+   if(ans2>0) ans2--;
+   //cout<<ans<<" "<<ans2<<nl;
+   cout<<ans2+ans<<nl;
+}
