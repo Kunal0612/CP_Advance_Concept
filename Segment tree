@@ -115,61 +115,101 @@ struct Update {
 
 
 
-int N;
-vector<int> v(N), Tree(4*N), Lazy(4*N, 0);
-
-void buildTree(int tidx, int lo, int hi){
-
+vector<ll> v,Tree,Lazy;
+void buildTree(ll tidx,ll lo,ll hi){
+ 
 	if(lo==hi){
 		Tree[tidx] = v[hi];
 		return;
 	}
-
-	int mid = (lo+hi)/2;
-
+ 
+	ll mid = (lo+hi)/2;
+ 
 	buildTree(2*tidx+1, lo, mid);
 	buildTree(2*tidx+2, mid+1, hi);
-
-	Tree[tidx] = Tree[2*tidx+1] + Tree[2*tidx+2];
-
+ 
+	Tree[tidx] = Tree[2*tidx+1]+Tree[2*tidx+2];
+ 
 }
-
-void updateTree(int tidx, int lo, int hi, int idx, int val){
-
+ 
+void updateTree(ll tidx, ll lo, ll hi, ll idx, ll val){
+ 
 	if(lo==hi){
 		Tree[tidx] = val;
 		return;
 	}
-
-	int mid = (lo+hi)/2;
-
+ 
+	ll mid = (lo+hi)/2;
+ 
 	if(idx<=mid)
 		updateTree(2*tidx+1, lo, mid, idx, val);
 	else
 		updateTree(2*tidx+2, mid+1, hi, idx, val);
-
+ 
 	Tree[tidx] = Tree[2*tidx+1] + Tree[2*tidx+2];
-
+ 
 }
-
-int query(int tidx, int lo, int hi, int L, int R){
-
+ 
+ll query(ll tidx, ll lo, ll hi, ll L, ll R){
+ 
 	// The Range which we are currently in : [lo, hi]
 	// The Range of which we have to compute the answer : [L, R]
-
+ 
 	// Outside Range
 	if( R<lo || L>hi )
 		return 0;
-
+ 
 	// In Range
 	if( lo>=L && hi<=R )
 		return Tree[tidx];
-
+ 
 	// Partial Overlap
-	int mid = (lo+hi)/2;
-	int leftans = query(2*tidx+1, lo, mid, L, R);
-	int rightans = query(2*tidx+2, mid+1, hi, L, R);
-
-	return leftans + rightans;
-
+	ll mid = (lo+hi)/2;
+	ll leftans = query(2*tidx+1, lo, mid, L, R);
+	ll rightans = query(2*tidx+2, mid+1, hi, L, R);
+	return leftans+rightans;
+}
+ 
+void kunal(){
+    ll n,m;
+    cin>>n>>m;
+    v.resize(n);
+    Tree.resize(4*n);
+    Lazy.resize(4*n,0);
+    for(ll i=0;i<n;i++){
+        cin>>v[i];
+    }
+    buildTree(0,0,n-1);
+    for(ll i=0;i<m;i++){
+        ll ch;
+        cin>>ch;
+        if(ch==1){
+            ll idx,val;
+            cin>>idx>>val;
+            idx--;
+            updateTree(0,0,n-1,idx,val);
+        }
+        else if(ch==2){
+            ll l,r;
+            cin>>l>>r;
+            l--;
+            r--;
+            ll ans=query(0,0,n-1,l,r);
+            cout<<ans<<nl;
+        }
+    }
+}
+ 
+ 
+//cout << fixed << setprecision(10) <<sum;
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    //freopen("input.txt", "r", stdin);
+    //freopen("output.txt", "w", stdout);
+    int t=1;
+    while(t--){
+        kunal();
+    }
+    return 0;
 }
