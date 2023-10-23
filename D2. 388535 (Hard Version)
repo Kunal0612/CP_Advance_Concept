@@ -1,0 +1,147 @@
+// Author : Epsilon573
+// If it works, don't touch it.
+
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef unsigned long long ull;
+typedef long long ll;
+typedef long double ld;
+
+const ll mod  = 1e9+7;
+const ld eps  = 1e-9 ;
+const ll maxn = 1e5+1;
+const ll inf  = 5e18 ;
+const ll minf = -inf ;
+
+#define mp make_pair
+#define pb push_back
+#define endl "\n"
+
+const int letters = 2;
+struct Node {
+    vector<int> next_node;
+    int is_a_leaf = 0;
+    Node() {
+        next_node.resize(letters);
+        fill(next_node.begin(), next_node.end(), -1);
+    }
+};
+struct Trie{
+    vector<Node> trie_tree;
+    Trie(){
+        trie_tree.emplace_back();
+    }
+    void add_string(string a) {
+        int root_here = 0;
+        for(char c : a){
+            int index = c - '0';
+            if(trie_tree[root_here].next_node[index] == -1) {
+                  trie_tree[root_here].next_node[index] = trie_tree.size();
+                  trie_tree.emplace_back();
+            }
+            root_here = trie_tree[root_here].next_node[index];
+        }
+        trie_tree[root_here].is_a_leaf++;
+    }
+    int query1(string a){
+        int root_here = 0;
+        int max_element = 0;
+        int power = (1 << 17);
+        for(char c : a){
+            int index = (c - '0') ^ 1;
+            if(trie_tree[root_here].next_node[index] != -1) {
+                max_element ^= power;
+                root_here = trie_tree[root_here].next_node[index];
+            }else{
+                root_here = trie_tree[root_here].next_node[index ^ 1];    
+            }
+            power /= 2;
+        }
+        return max_element;
+    }
+    int query2(string a){
+        int root_here = 0;
+        int min_element = 0;
+        int power = (1 << 17);
+        for(char c : a){
+            int index = (c - '0');
+            if(trie_tree[root_here].next_node[index] != -1) {
+                root_here = trie_tree[root_here].next_node[index];
+            }else{
+                min_element ^= power;
+                root_here = trie_tree[root_here].next_node[index ^ 1];    
+            }
+            power /= 2;
+        }
+        return min_element;
+    }
+};
+string toBinary(int a){
+    string ans = "";
+    for(int i = 17; i >= 0; i--){
+        if(a & (1 << i)){
+            ans += '1';
+        }else{
+            ans += '0';
+        }
+    }
+    return ans;
+}
+
+bool solve()
+{
+    ll l,r;
+    cin >> l >> r;
+
+    ll n=r-l+1;
+
+    vector<ll> v(n);
+    for(ll i=0 ; i<n ; ++i)
+        cin >> v[i];
+
+    Trie T = Trie();
+
+    for(ll i=0 ; i<n ; ++i)
+        T.add_string(toBinary(v[i]));
+
+    for(ll i=0 ; i<n ; ++i)
+        if(T.query2(toBinary(v[i]^l))==l && T.query1(toBinary(v[i]^l))==r)
+        {
+            cout << (v[i]^l) << endl;
+            return true;
+        }
+
+    return false;    
+}
+
+int main()
+{
+    ios_base :: sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    // #ifdef EPSILON
+    // freopen("input.txt","r",stdin);
+    // freopen("output.txt","w",stdout);
+    // freopen("error.txt","w",stderr);
+    // #endif
+
+    ll t=1;
+    cin >> t;
+
+    while(t--)
+    {
+        if(solve())
+        {
+            // cout << "YES" << endl;
+        }
+        else
+        {
+            assert(false);
+            // cout << "NO" << endl;
+        }
+    }
+
+    return 0;
+} 
