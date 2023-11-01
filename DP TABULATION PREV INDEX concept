@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
+        int n=nums.size();
+        sort(nums.begin(),nums.end());
+        vector<int> dp(n,1);
+        vector<int> previdx(n,-1);
+        int maxend=-1,maxlen=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<i;j++){
+                if(nums[i]%nums[j]==0){
+                    if(dp[j]+1>dp[i]){
+                        dp[i]=dp[j]+1;
+                        previdx[i]=j;
+                    }
+                }
+            }
+            if(dp[i]>maxlen){
+                maxlen=dp[i];
+                maxend=i;
+            }
+        }
+        vector<int> ans;
+        while(maxend!=-1){
+            ans.push_back(nums[maxend]);
+            maxend=previdx[maxend];
+        }
+        return ans;
+    }
+};
