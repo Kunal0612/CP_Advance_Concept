@@ -1,0 +1,140 @@
+/*********Jai Shree Ram*****************
+**        Solution by kunal0612       **
+**********Jai Shree Ram****************/
+#include <bits/stdc++.h>
+#define ll int
+#define lll unsigned long long
+#define yes cout<<"YES"<<endl;
+#define no cout<<"NO"<<endl;
+#define mod 1000000007
+#define nl "\n"
+using namespace std;
+
+vector<vector<ll>> dir4={{1,0},{0,1},{-1,0},{0,-1}};
+vector<vector<ll>> dir8={{1,0},{0,1},{-1,0},{0,-1},{1,1},{-1,1},{-1,-1},{1,-1}};
+
+struct Node {
+    int mx = 0, mx2 = 0;
+    int count_mx = 0, count_mx2 = 0;
+};
+
+Node pull(const Node& a, const Node& b) {
+    Node ans;
+    if (a.mx>b.mx){
+        ans.mx = a.mx;
+        ans.count_mx += a.count_mx;
+        if (a.mx2 > b.mx) {
+            ans.mx2 = a.mx2;
+            ans.count_mx2 += a.count_mx2;
+        } else if (a.mx2 == b.mx) {
+            ans.mx2 = a.mx2;
+            ans.count_mx2 += a.count_mx2;
+            ans.count_mx2 += b.count_mx;
+        } else {
+            ans.mx2 = b.mx;
+            ans.count_mx2 += b.count_mx;
+        }
+        
+    } else if (a.mx == b.mx) {
+        ans.mx = a.mx;
+        ans.count_mx += a.count_mx;
+        ans.count_mx += b.count_mx;
+        if (a.mx2 > b.mx2) {
+            ans.mx2 = a.mx2;
+            ans.count_mx2 += a.count_mx2;
+        } else if (a.mx2 == b.mx2) {
+            ans.mx2 = a.mx2;
+            ans.count_mx2 += a.count_mx2;
+            ans.count_mx2 += b.count_mx2;
+        } else {
+            ans.mx2 = b.mx2;
+            ans.count_mx2 += b.count_mx2;
+        }
+    } else if (a.mx < b.mx) {
+        ans.mx = b.mx;
+        ans.count_mx += b.count_mx;
+        if (b.mx2 > a.mx) {
+            ans.mx2 = b.mx2;
+            ans.count_mx2 += b.count_mx2;
+        } else if (b.mx2 == a.mx) {
+            ans.mx2 = b.mx2;
+            ans.count_mx2 += b.count_mx2;
+            ans.count_mx2 += a.count_mx;
+        } else {
+            ans.mx2 = a.mx;
+            ans.count_mx2 += a.count_mx;
+        }
+    }
+    return ans;
+}
+
+vector<Node> tree;
+ll sz;
+
+Node query(ll low,ll high,ll node=1,ll node_low=0,ll node_high=sz-1){
+    if(high<node_low or low>node_high) {
+        return Node();
+    }
+    if(low<=node_low and high>=node_high) {
+        return tree[node];
+    }
+    ll mid=(node_low+node_high)/2;
+    return pull(query(low,high,2*node,node_low,mid),query(low,high,2*node+1,mid+1,node_high));
+}
+
+void update(ll pos,ll val,ll node=1,ll node_low=0,ll node_high=sz-1){
+    if(pos<node_low or pos>node_high) return;
+    if(pos==node_low and pos==node_high) {
+        tree[node].mx=val;
+        tree[node].count_mx=1;
+        return;
+    }
+    ll mid=(node_low+node_high)/2;
+    update(pos,val,2*node,node_low,mid);
+    update(pos,val,2*node+1,mid+1,node_high);
+    tree[node]=pull(tree[2*node],tree[2*node + 1]);
+}
+
+
+void build(vector<ll> &a){
+    ll n=a.size();
+    tree.clear();
+    sz=1;
+    if(n==1) sz=2;
+    while(sz<n) sz=sz*2;
+    tree.resize(2*sz);
+    for(ll i=0; i<n; i++){
+        update(i,a[i]);
+    }
+}
+
+
+void kunal(){
+    ll n,q;
+    cin>>n>>q;
+    vector<ll> a(n);
+    for(ll i=0;i<n;i++) cin>>a[i];
+    build(a);
+    while(q--){
+        ll c,a,b;
+        cin>>c>>a>>b;
+        if(c==1){
+            update(a-1,b);
+        }
+        else{
+            Node x=query(a-1,b-1);
+            cout<<x.count_mx2<<endl;
+        }
+    }
+}
+
+
+//cout << fixed << setprecision(10) <<sum;
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    //freopen("input.txt", "r", stdin);
+    //freopen("output.txt", "w", stdout);
+    kunal();
+    return 0;
+}
