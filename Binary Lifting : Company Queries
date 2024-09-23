@@ -1,0 +1,77 @@
+/*********Jai Shree Ram*****************
+**        Solution by kunal0612       **
+**********Jai Shree Ram****************/
+#include <bits/stdc++.h>
+#define int long long  
+#define lll unsigned long long
+#define yes cout << "YES" << endl;
+#define no cout << "NO" << endl;
+#define mod 1000000007
+#define nl "\n"
+#define pi pair<ll, ll>
+using namespace std;
+
+
+// Binary Lifting
+
+vector<int> tree[200001];
+int up[200001][31];
+ 
+
+// up[src][i] = up[up[src][i-1]][i-1]
+
+
+void binary_lifting(int src, int par)
+{
+    up[src][0] = par;
+    for(int i = 1; i < 31; i++)
+    {
+        // if there is some node present
+        if(up[src][i-1] != -1)
+            up[src][i] = up[up[src][i-1]][i-1];
+        else up[src][i] = -1;
+    }
+ 
+    for(int child : tree[src])
+    {
+        if(child != par)
+            binary_lifting(child, src);
+    }
+}
+ 
+int ans_query(int node, int jump_required)
+{
+    int ans=node;;
+    for(int i=0;i<31; i++){
+        if(jump_required & (1<<i)){
+            ans=up[ans][i];
+            if(ans==-1 or ans==0) return ans;
+        }
+    }
+    return ans;
+}
+
+void kunal()
+{
+    int n,q;
+    cin >> n >> q;
+    for (int i = 2; i < n + 1; i++)
+    {
+        int x;
+        cin >> x;
+        tree[x].push_back(i);
+        tree[i].push_back(x);
+    }
+    binary_lifting(1, -1);
+    while (q--)
+    {
+        int node, k;
+        cin >> node >> k;
+        cout << ans_query(node, k) << endl;
+    }
+}
+
+signed main() {
+   kunal();
+   return 0;
+}
