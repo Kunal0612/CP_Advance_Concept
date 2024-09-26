@@ -32,6 +32,49 @@ struct DSU {
     }
 };
 
+class Solution
+{
+    public:
+    
+    vector<vector<int>> solve(int n, int p, vector<int>& a, vector<int>& b, vector<int>& d) {
+    DSU dsu(n);
+    
+    vector<int> outgoing(n + 1, -1), incoming(n + 1, -1);
+    vector<int> min_diameter(n + 1, INT_MAX);
+    
+    // Track outgoing, incoming pipes and union the sets
+    for (int i = 0; i < p; ++i) {
+        int u = a[i], v = b[i], diam = d[i];
+        dsu.unite(u, v);
+        outgoing[u] = v;
+        incoming[v] = u;
+        min_diameter[dsu.find(u)] = min(min_diameter[dsu.find(u)], diam);
+    }
+    
+    // Find tanks and taps
+    vector<vector<int>> result;
+    for (int i = 1; i <= n; ++i) {
+        if (outgoing[i] != -1 && incoming[i] == -1) {  // Starting point (Tank)
+            int start = i;
+            int end = start;
+            int min_diam = min_diameter[dsu.find(start)];
+            
+            while (outgoing[end] != -1) {  // Traverse till the last house in the chain
+                end = outgoing[end];
+            }
+            
+            result.push_back({start, end, min_diam});
+        }
+    }
+    
+    // Sort based on the house number containing the tank
+    sort(result.begin(), result.end());
+    
+    return result;
+}
+};
+
+
 
 With DFS
 
